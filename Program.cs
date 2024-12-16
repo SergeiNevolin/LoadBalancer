@@ -34,15 +34,9 @@ class Program
             var distributionTask = balancer.DistributeAsync(cts.Token);
             var monitorTask = consoleMonitor.MonitorAsync(cts.Token);
 
-            while (!cts.Token.IsCancellationRequested)
-            {
-                if (distributionTask.IsCompleted)
-                {
-                    cts.Cancel();
-                }
-            }
-
             await distributionTask;
+            cts.Cancel();
+
             await monitorTask;
         }
         catch (Exception ex)
