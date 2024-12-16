@@ -1,4 +1,5 @@
-﻿using LoadBalancer.Models;
+﻿using System.Collections.Concurrent;
+using LoadBalancer.Models;
 using LoadBalancer.Services;
 using LoadBalancer.Services.interfaces;
 
@@ -53,9 +54,9 @@ class Program
         return workers;
     }
 
-    static private Queue<TaskItem> GenerateTasks(int tasksCount = 100)
+    static private ConcurrentQueue<TaskItem> GenerateTasks(int tasksCount = 100)
     {
-        var taskQueue = new Queue<TaskItem>();
+        var taskQueue = new ConcurrentQueue<TaskItem>();
         var random = new Random();
 
         for (int i = 0; i < tasksCount; i++)
