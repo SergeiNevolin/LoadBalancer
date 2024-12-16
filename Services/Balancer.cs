@@ -1,5 +1,6 @@
 using System.Text;
 using LoadBalancer.Models;
+using LoadBalancer.Services.interfaces;
 
 namespace LoadBalancer.Services;
 
@@ -9,7 +10,7 @@ public class Balancer(List<IWorker> workers, Queue<TaskItem> taskQueue) : IBalan
     private readonly Queue<TaskItem> _taskQueue = taskQueue;
     private readonly TimeSpan _pollingInterval = TimeSpan.FromMilliseconds(100);
 
-    public async Task DistributeTasksAsync(CancellationToken cancellationToken)
+    public async Task DistributeAsync(CancellationToken cancellationToken)
     {
         var runnedTasks = new List<Task>();
 

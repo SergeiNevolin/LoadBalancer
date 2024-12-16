@@ -1,4 +1,5 @@
 using LoadBalancer.Models;
+using LoadBalancer.Services.interfaces;
 
 namespace LoadBalancer.Services;
 

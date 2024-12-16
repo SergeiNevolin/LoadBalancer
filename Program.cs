@@ -1,5 +1,6 @@
 ﻿using LoadBalancer.Models;
 using LoadBalancer.Services;
+using LoadBalancer.Services.interfaces;
 
 namespace LoadBalancer;
 
@@ -24,23 +25,33 @@ class Program
             taskQueue.Enqueue(new TaskItem(random.Next(1, 6), random.Next(2, 10)));
         }
 
-        var loadBalancer = new Balancer(workers, taskQueue);
+        var balancer = new Balancer(workers, taskQueue);
+        var consoleMonitor = new ConsoleMonitor(balancer);
         var cts = new CancellationTokenSource();
-        var distributionTask = loadBalancer.DistributeTasksAsync(cts.Token);
 
-        while (!cts.Token.IsCancellationRequested)
+        try
         {
-            Console.Clear();
-            Console.WriteLine(loadBalancer.GetStatus());
-            Console.WriteLine("Нажмите любую клавишу для завершения...");
-            await Task.Delay(2000);
+            var distributionTask = balancer.DistributeAsync(cts.Token);
+            var monitorTask = consoleMonitor.MonitorAsync(cts.Token);
 
-            if (Console.KeyAvailable)
+            while (!cts.Token.IsCancellationRequested)
             {
-                cts.Cancel();
+                if (distributionTask.IsCompleted)
+                {
+                    cts.Cancel();
+                }
             }
-        }
 
-        await distributionTask;
+            await distributionTask;
+            await monitorTask;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Произошла ошибка: {ex.Message}");
+        }
+        finally
+        {
+            Console.WriteLine("Балансировщик завершил работу.");
+        }
     }
 }
