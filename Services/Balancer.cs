@@ -18,12 +18,12 @@ public class Balancer(List<IWorker> workers, Queue<TaskItem> taskQueue) : IBalan
         {
             var taskItem = _taskQueue.Peek();
             var availableWorker = _workers
-                .Where(w => w.CanTakeTask(taskItem))
+                .Where(w => w.CanTake(taskItem))
                 .MinBy(w => w.GetCurrentLoad());
 
             if (availableWorker is not null)
             {
-                runnedTasks.Add(availableWorker.ExecuteTaskAsync(taskItem, cancellationToken));
+                runnedTasks.Add(availableWorker.ExecuteAsync(taskItem, cancellationToken));
                 _taskQueue.Dequeue();
             }
 

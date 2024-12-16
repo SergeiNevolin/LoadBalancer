@@ -22,7 +22,7 @@ public class Worker(string name, int maxLoad, int maxTasks) : IWorker
         }
     }
 
-    public bool CanTakeTask(TaskItem task)
+    public bool CanTake(TaskItem task)
     {
         lock (_lock)
         {
@@ -30,7 +30,7 @@ public class Worker(string name, int maxLoad, int maxTasks) : IWorker
         }
     }
 
-    public async Task ExecuteTaskAsync(TaskItem task, CancellationToken cancellationToken)
+    public async Task ExecuteAsync(TaskItem task, CancellationToken cancellationToken)
     {
         lock (_lock)
         {
