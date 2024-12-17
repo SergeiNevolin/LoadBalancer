@@ -20,7 +20,7 @@ public class Balancer(List<IWorker> workers, ConcurrentQueue<TaskItem> taskQueue
             if (_taskQueue.TryPeek(out var taskItem))
             {
                 var availableWorker = _workers
-                    .Where(w => w.CanTake(taskItem))
+                    .Where(w => w.CanExecute(taskItem))
                     .MinBy(w => w.GetCurrentLoad());
 
                 if (availableWorker is not null && _taskQueue.TryDequeue(out var _))

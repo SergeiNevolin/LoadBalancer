@@ -5,6 +5,6 @@ namespace LoadBalancer.Services.interfaces;
 public interface IWorker: IStatusProvider
 {
     int GetCurrentLoad();
-    bool CanTake(TaskItem task);
+    bool CanExecute(TaskItem task);
     Task ExecuteAsync(TaskItem task, CancellationToken cancellationToken);
 }

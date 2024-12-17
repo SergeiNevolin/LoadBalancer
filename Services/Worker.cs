@@ -22,7 +22,7 @@ public class Worker(string name, int maxLoad, int maxTasks) : IWorker
         }
     }
 
-    public bool CanTake(TaskItem task)
+    public bool CanExecute(TaskItem task)
     {
         lock (_lock)
         {
